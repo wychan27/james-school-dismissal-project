@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Schedule – Saint David's School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --maroon: #7B1C2E;
+      --maroon-dark: #5a1220;
+      --gold: #C9A84C;
+      --gold-light: #e2c97e;
+      --cream: #F5F0E8;
+      --cream-dark: #ece5d6;
+      --text-dark: #2a1a1f;
+      --text-mid: #5a4a4e;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    nav {
+      background-color: var(--maroon);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .nav-logo { font-family: 'Cinzel', serif; color: var(--white); font-size: 1.1rem; letter-spacing: 0.05em; }
+    .nav-logo span { color: var(--gold-light); font-weight: 600; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 40%, #b8862a 100%);
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-label { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1rem; position: relative; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3rem); color: var(--white); font-weight: 400; line-height: 1.15; position: relative; }
+    .hero h1 em { font-style: italic; color: var(--gold-light); }
+    .hero-sub { margin-top: 1rem; font-family: 'Cormorant Garamond', serif; font-style: italic; color: rgba(255,255,255,0.78); font-size: 1.05rem; max-width: 460px; margin-left: auto; margin-right: auto; position: relative; }
+    .hero-divider { width: 50px; height: 1px; background: var(--gold); margin: 1.2rem auto 0; position: relative; }
+
+    /* LOADING STATE */
+    .loading-screen {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .loading-screen p {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-mid);
+    }
+
+    /* MAIN */
+    main { max-width: 780px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+    /* CHILD INFO BANNER */
+    .child-banner {
+      background: var(--maroon);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 12px rgba(123,28,46,0.15);
+    }
+    .child-avatar {
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .child-banner-info h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .child-banner-info p {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.65);
+      margin-top: 0.2rem;
+    }
+
+    /* SECTION CARDS */
+    .section-card {
+      background: var(--white);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 16px rgba(123,28,46,0.08);
+    }
+    .section-header {
+      background-color: var(--maroon);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+    .section-header h2 { font-family: 'Lato', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); }
+    .section-body { padding: 1.8rem 1.5rem; }
+
+    /* FORM FIELDS */
+    .field-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field-group label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--maroon); }
+    .field-group input,
+    .field-group select {
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.95rem;
+      font-family: 'Lato', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field-group input:focus,
+    .field-group select:focus {
+      outline: none;
+      border-color: var(--maroon);
+      box-shadow: 0 0 0 3px rgba(123,28,46,0.1);
+      background: var(--white);
+    }
+
+    .select-wrapper { position: relative; }
+    .select-wrapper::after { content: '▼'; position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); font-size: 0.6rem; color: var(--maroon); pointer-events: none; }
+    .select-wrapper select { padding-right: 2rem; cursor: pointer; }
+
+    /* SCHEDULE DAYS */
+    .schedule-day { border: 1.5px solid var(--cream-dark); border-radius: 4px; margin-bottom: 1rem; overflow: hidden; }
+    .day-label { background: var(--cream-dark); padding: 0.6rem 1rem; font-family: 'Cinzel', serif; font-size: 0.78rem; font-weight: 600; color: var(--maroon); letter-spacing: 0.05em; }
+    .day-fields { padding: 1rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .day-fields { grid-template-columns: 1fr; } }
+
+    /* SUBMIT */
+    .submit-section { text-align: center; margin-top: 2rem; }
+    .btn-submit {
+      background: var(--maroon);
+      color: var(--white);
+      border: none;
+      padding: 1rem 3rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(123,28,46,0.25);
+    }
+    .btn-submit:hover { background: var(--maroon-dark); box-shadow: 0 6px 20px rgba(123,28,46,0.35); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .status-msg { margin-top: 1rem; padding: 0.8rem 1.2rem; border-radius: 3px; font-size: 0.9rem; display: none; }
+    .status-msg.error { background: #fdecea; color: #b71c1c; border-left: 4px solid #b71c1c; display: block; }
+    .status-msg.success { background: #e8f5e9; color: #1b5e20; border-left: 4px solid #2e7d32; display: block; }
+
+    .req { color: var(--gold); margin-left: 2px; }
+
+    footer { text-align: center; padding: 2rem; font-size: 0.78rem; color: var(--text-mid); border-top: 1px solid var(--cream-dark); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Saint David's <span>School</span></div>
+  <div class="nav-links">
+    <a href="#">Welcome Page</a>
+    <a href="#">Home</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <p class="hero-label">Dismissal Services</p>
+  <h1>Edit Your Child's<br><em>Dismissal Schedule</em></h1>
+  <p class="hero-sub">Update your child's weekly pickup schedule below.</p>
+  <div class="hero-divider"></div>
+</div>
+
+<!-- LOADING STATE -->
+<div id="loadingScreen" class="loading-screen">
+  <p>Loading your child's schedule...</p>
+</div>
+
+<!-- MAIN CONTENT (hidden until data loads) -->
+<main id="mainContent" style="display:none;">
+
+  <!-- CHILD INFO BANNER -->
+  <div class="child-banner">
+    <div class="child-avatar">👦</div>
+    <div class="child-banner-info">
+      <h3 id="childName">Loading...</h3>
+      <p id="parentName">Loading...</p>
+    </div>
+  </div>
+
+  <!-- WEEKLY SCHEDULE -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-icon">📅</div>
+      <h2>Weekly Pickup Schedule</h2>
+    </div>
+    <div class="section-body">
+
+      <!-- MONDAY -->
+      <div class="schedule-day">
+        <div class="day-label">Monday</div>
+        <div class="day-fields">
+          <div class="field-group">
+            <label>Pickup Type <span class="req">*</span></label>
+            <div class="select-wrapper">
+              <select id="monday_type">
+                <option value="">Select type...</option>
+                <option>Downtown SNT Bus</option>
+                <option>West Side SNT Bus</option>
+                <option>Uptown SNT Bus</option>
+                <option>Private Downtown Bus</option>
+                <option>Pickup</option>
+                <option>Self Dismissal</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Pickup Time <span class="req">*</span></label>
+            <input type="time" id="monday_time" />
+          </div>
+          <div class="field-group">
+            <label>Pickup Person</label>
+            <input type="text" id="monday_person" placeholder="Person's name" />
+          </div>
+        </div>
+      </div>
+
+      <!-- TUESDAY -->
+      <div class="schedule-day">
+        <div class="day-label">Tuesday</div>
+        <div class="day-fields">
+          <div class="field-group">
+            <label>Pickup Type <span class="req">*</span></label>
+            <div class="select-wrapper">
+              <select id="tuesday_type">
+                <option value="">Select type...</option>
+                <option>Downtown SNT Bus</option>
+                <option>West Side SNT Bus</option>
+                <option>Uptown SNT Bus</option>
+                <option>Private Downtown Bus</option>
+                <option>Pickup</option>
+                <option>Self Dismissal</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Pickup Time <span class="req">*</span></label>
+            <input type="time" id="tuesday_time" />
+          </div>
+          <div class="field-group">
+            <label>Pickup Person</label>
+            <input type="text" id="tuesday_person" placeholder="Person's name" />
+          </div>
+        </div>
+      </div>
+
+      <!-- WEDNESDAY -->
+      <div class="schedule-day">
+        <div class="day-label">Wednesday</div>
+        <div class="day-fields">
+          <div class="field-group">
+            <label>Pickup Type <span class="req">*</span></label>
+            <div class="select-wrapper">
+              <select id="wednesday_type">
+                <option value="">Select type...</option>
+                <option>Downtown SNT Bus</option>
+                <option>West Side SNT Bus</option>
+                <option>Uptown SNT Bus</option>
+                <option>Private Downtown Bus</option>
+                <option>Pickup</option>
+                <option>Self Dismissal</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Pickup Time <span class="req">*</span></label>
+            <input type="time" id="wednesday_time" />
+          </div>
+          <div class="field-group">
+            <label>Pickup Person</label>
+            <input type="text" id="wednesday_person" placeholder="Person's name" />
+          </div>
+        </div>
+      </div>
+
+      <!-- THURSDAY -->
+      <div class="schedule-day">
+        <div class="day-label">Thursday</div>
+        <div class="day-fields">
+          <div class="field-group">
+            <label>Pickup Type <span class="req">*</span></label>
+            <div class="select-wrapper">
+              <select id="thursday_type">
+                <option value="">Select type...</option>
+                <option>Downtown SNT Bus</option>
+                <option>West Side SNT Bus</option>
+                <option>Uptown SNT Bus</option>
+                <option>Private Downtown Bus</option>
+                <option>Pickup</option>
+                <option>Self Dismissal</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Pickup Time <span class="req">*</span></label>
+            <input type="time" id="thursday_time" />
+          </div>
+          <div class="field-group">
+            <label>Pickup Person</label>
+            <input type="text" id="thursday_person" placeholder="Person's name" />
+          </div>
+        </div>
+      </div>
+
+      <!-- FRIDAY -->
+      <div class="schedule-day">
+        <div class="day-label">Friday</div>
+        <div class="day-fields">
+          <div class="field-group">
+            <label>Pickup Type <span class="req">*</span></label>
+            <div class="select-wrapper">
+              <select id="friday_type">
+                <option value="">Select type...</option>
+                <option>Downtown SNT Bus</option>
+                <option>West Side SNT Bus</option>
+                <option>Uptown SNT Bus</option>
+                <option>Private Downtown Bus</option>
+                <option>Pickup</option>
+                <option>Self Dismissal</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Pickup Time <span class="req">*</span></label>
+            <input type="time" id="friday_time" />
+          </div>
+          <div class="field-group">
+            <label>Pickup Person</label>
+            <input type="text" id="friday_person" placeholder="Person's name" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="btn-submit" id="submitBtn" onclick="saveSchedule()">Save Changes</button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2026 Saint David's School &nbsp;|&nbsp; Dismissal Services
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // =============================================
+  //  CONFIGURATION — replace with your own keys
+  // =============================================
+  const SUPABASE_URL = 'https://neakgshdsyrfclsqxxph.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_Am8Odvk6aUuFnNlPnM9Hhw_29EmPBQk';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  let childRecord = null;
+
+  // =============================================
+  //  LOAD CHILD & SCHEDULE DATA ON PAGE LOAD
+  // =============================================
+  async function loadData() {
+    try {
+// Get session from magic link
+/*
+      const { data: { session } } = await db.auth.getSession();
+      if (!session || !session.user) {
+        document.getElementById('loadingScreen').innerHTML =
+          '<p style="color:#b71c1c;">Your edit link has expired. Please <a href="edit-login.html">request a new one</a>.</p>';
+        return;
+      }
+      const email = session.user.email;
+*/ 
+    const { data: { session } } = await db.auth.getSession();
+      if (!session || !session.user) {
+        document.getElementById('loadingScreen').innerHTML =
+          '<p style="color:#b71c1c;">Your edit link has expired. Please <a href="edit-login.html">request a new one</a>.</p>';
+        return;
+      }
+      const email = session.user.email;
+      console.log('Session email:', email);
+
+      // Look up child by parent email
+      const { data: children, error: childError } = await db
+        .from('children')
+        .select('*')
+        .eq('parent_email', email)
+        .eq('is_active', true)
+        .order('id', { ascending: false })
+        .limit(1);
+
+      const child = children && children.length > 0 ? children[0] : null;
+
+      if (childError || !child) {
+        document.getElementById('loadingScreen').innerHTML =
+          '<p style="color:#b71c1c;">No child record found for this account. Please contact the school office.</p>';
+        return;
+      }
+
+      // add section
+      if (childError || !child) {
+        console.log('Child lookup failed. Email used:', email);
+        console.log('Child error:', childError);
+        document.getElementById('loadingScreen').innerHTML =
+          '<p style="color:#b71c1c;">No child record found for this account. Please contact the school office.</p>';
+        return;
+      }
+
+      childRecord = child;
+
+      // Update the banner with child's name
+      document.getElementById('childName').textContent =
+        child.child_first_name + ' ' + child.child_last_name;
+      document.getElementById('parentName').textContent =
+        'Parent: ' + child.parent_first_name + ' ' + child.parent_last_name;
+
+      // Load the schedule records
+      const { data: schedules, error: schedError } = await db
+        .from('schedules')
+        .select('*')
+        .eq('child_id', child.id);
+
+      if (schedError) throw schedError;
+
+      // Pre-fill the form with existing schedule data
+      schedules.forEach(row => {
+        const dayId = row.day_of_week.toLowerCase();
+        const typeEl = document.getElementById(dayId + '_type');
+        const timeEl = document.getElementById(dayId + '_time');
+        const personEl = document.getElementById(dayId + '_person');
+        if (typeEl) typeEl.value = row.pickup_type || '';
+        if (timeEl) timeEl.value = row.pickup_time || '';
+        if (personEl) personEl.value = row.pickup_person_name || '';
+      });
+
+      // Show the form, hide loading
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById('loadingScreen').innerHTML =
+        '<p style="color:#b71c1c;">Something went wrong loading your schedule. Please try again.</p>';
+    }
+  }
+
+  loadData();
+
+  // =============================================
+  //  SAVE UPDATED SCHEDULE
+  // =============================================
+  async function saveSchedule() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    try {
+      // Update each day's schedule row
+      for (const day of days) {
+        const dayId = day.toLowerCase();
+        const { error } = await db
+          .from('schedules')
+          .update({
+            pickup_type: document.getElementById(dayId + '_type').value,
+            pickup_time: document.getElementById(dayId + '_time').value,
+            pickup_person_name: document.getElementById(dayId + '_person').value.trim(),
+          })
+          .eq('child_id', childRecord.id)
+          .eq('day_of_week', day);
+
+        if (error) throw error;
+      }
+
+      showStatus('✓ Your schedule has been updated successfully!', 'success');
+      btn.textContent = 'Changes Saved!';
+
+      // Re-enable after a few seconds
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Save Changes';
+      }, 3000);
+
+    } catch (err) {
+      console.error(err);
+      showStatus('Something went wrong. Please try again or contact the school.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Save Changes';
+    }
+  }
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+  }
+</script>
+
+</body>
+</html>

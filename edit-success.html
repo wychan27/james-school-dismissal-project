@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Schedule Updated – Saint David's School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --maroon: #7B1C2E;
+      --maroon-dark: #5a1220;
+      --gold: #C9A84C;
+      --gold-light: #e2c97e;
+      --cream: #F5F0E8;
+      --cream-dark: #ece5d6;
+      --text-dark: #2a1a1f;
+      --text-mid: #5a4a4e;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background-color: var(--maroon);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .nav-logo { font-family: 'Cinzel', serif; color: var(--white); font-size: 1.1rem; letter-spacing: 0.05em; }
+    .nav-logo span { color: var(--gold-light); font-weight: 600; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    .success-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+
+    .success-card {
+      background: var(--white);
+      border-radius: 6px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 8px 40px rgba(123,28,46,0.12);
+      overflow: hidden;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-header {
+      background: linear-gradient(135deg, var(--maroon-dark), var(--maroon));
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .checkmark {
+      width: 70px; height: 70px;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 2rem;
+      animation: popIn 0.5s 0.3s ease both;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .success-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--white);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+    .success-header h1 em { font-style: italic; color: var(--gold-light); }
+
+    .gold-line { width: 50px; height: 1px; background: var(--gold); margin: 1rem auto 0; }
+
+    .success-body { padding: 2rem 2rem 2.5rem; text-align: center; }
+
+    .success-body p {
+      color: var(--text-mid);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .info-box {
+      background: var(--cream);
+      border-left: 4px solid var(--gold);
+      border-radius: 3px;
+      padding: 1rem 1.2rem;
+      text-align: left;
+      margin: 1.5rem 0;
+    }
+    .info-box p { margin: 0; font-size: 0.88rem; color: var(--text-mid); line-height: 1.6; }
+    .info-box strong { color: var(--maroon); font-weight: 700; }
+
+    .btn-home {
+      display: inline-block;
+      background: var(--maroon);
+      color: var(--white);
+      text-decoration: none;
+      padding: 0.85rem 2.5rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 4px 16px rgba(123,28,46,0.2);
+    }
+    .btn-home:hover { background: var(--maroon-dark); transform: translateY(-1px); }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      border-top: 1px solid var(--cream-dark);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Saint David's <span>School</span></div>
+  <div class="nav-links">
+    <a href="#">Welcome Page</a>
+    <a href="#">Home</a>
+  </div>
+</nav>
+
+<div class="success-container">
+  <div class="success-card">
+    <div class="success-header">
+      <div class="checkmark">✓</div>
+      <h1>Schedule<br><em>Updated!</em></h1>
+      <div class="gold-line"></div>
+    </div>
+    <div class="success-body">
+      <p>Your child's dismissal schedule has been successfully updated.</p>
+
+      <div class="info-box">
+        <p><strong>What happens next?</strong><br>
+        Your changes are effective immediately. The school's dismissal team will see the updated schedule. If you need to make additional changes, simply use your edit link or request a new one from the school.</p>
+      </div>
+
+      <p style="font-size:0.85rem;">If you have any questions, please contact the school office directly.</p>
+
+      <a href="#" class="btn-home">Return to Home</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 Saint David's School &nbsp;|&nbsp; Dismissal Services
+</footer>
+
+</body>
+</html>

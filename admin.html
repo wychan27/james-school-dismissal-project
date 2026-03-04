@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Saint David's School Dismissal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --maroon: #7B1C2E;
+      --maroon-dark: #5a1220;
+      --gold: #C9A84C;
+      --gold-light: #e2c97e;
+      --cream: #F5F0E8;
+      --cream-dark: #ece5d6;
+      --text-dark: #2a1a1f;
+      --text-mid: #5a4a4e;
+      --white: #ffffff;
+      --green: #2e7d32;
+      --green-light: #e8f5e9;
+      --red: #b71c1c;
+      --red-light: #fdecea;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background-color: var(--maroon);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .nav-logo { font-family: 'Cinzel', serif; color: var(--white); font-size: 1.1rem; letter-spacing: 0.05em; }
+    .nav-logo span { color: var(--gold-light); font-weight: 600; }
+    .nav-badge {
+      background: rgba(255,255,255,0.15);
+      color: var(--gold-light);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      font-weight: 700;
+      border: 1px solid rgba(201,168,76,0.4);
+    }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .btn-logout {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.75);
+      padding: 0.35rem 0.9rem;
+      border-radius: 3px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+
+    /* ── PASSWORD SCREEN ── */
+    #passwordScreen {
+      min-height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .password-card {
+      background: var(--white);
+      border-radius: 4px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 40px rgba(123,28,46,0.12);
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .password-header {
+      background: linear-gradient(135deg, var(--maroon-dark), var(--maroon));
+      padding: 2rem;
+      text-align: center;
+    }
+    .lock-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+    .password-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      color: var(--white);
+      font-weight: 400;
+    }
+    .password-header h2 em { font-style: italic; color: var(--gold-light); }
+    .password-body { padding: 2rem; }
+    .password-body p { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 1.5rem; line-height: 1.6; }
+    .pw-field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .pw-field label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--maroon); }
+    .pw-field input {
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.95rem;
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .pw-field input:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(123,28,46,0.1); }
+    .btn-pw {
+      width: 100%;
+      background: var(--maroon);
+      color: var(--white);
+      border: none;
+      padding: 0.85rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 4px 16px rgba(123,28,46,0.2);
+    }
+    .btn-pw:hover { background: var(--maroon-dark); }
+    .pw-error { margin-top: 0.8rem; font-size: 0.85rem; color: var(--red); display: none; }
+
+    /* ── ADMIN CONTENT ── */
+    #adminContent { display: none; }
+
+    /* HEADER BAR */
+    .admin-header {
+      background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 50%, #a07020 100%);
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .admin-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .admin-header-inner { max-width: 1100px; margin: 0 auto; position: relative; }
+    .admin-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--white); font-weight: 400; }
+    .admin-header h1 em { font-style: italic; color: var(--gold-light); }
+    .admin-header p { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 0.3rem; }
+
+    /* STATS ROW */
+    .stats-row {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 2px 10px rgba(123,28,46,0.07);
+      border-left: 4px solid var(--gold);
+    }
+    .stat-card .stat-num { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--maroon); line-height: 1; }
+    .stat-card .stat-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-mid); margin-top: 0.3rem; }
+
+    /* CONTROLS */
+    .controls {
+      max-width: 1100px;
+      margin: 1.5rem auto 0;
+      padding: 0 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-wrap { position: relative; flex: 1; min-width: 220px; }
+    .search-wrap input {
+      width: 100%;
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.6rem 0.9rem 0.6rem 2.4rem;
+      font-size: 0.9rem;
+      font-family: 'Lato', sans-serif;
+      background: var(--white);
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { outline: none; border-color: var(--maroon); }
+    .search-wrap::before { content: '🔍'; position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 0.8rem; pointer-events: none; }
+
+    .day-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .day-tab {
+      background: var(--white);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.72rem;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-mid);
+    }
+    .day-tab:hover { border-color: var(--maroon); color: var(--maroon); }
+    .day-tab.active { background: var(--maroon); color: var(--white); border-color: var(--maroon); }
+
+    .filter-select {
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.85rem;
+      font-family: 'Lato', sans-serif;
+      background: var(--white);
+      color: var(--text-dark);
+      cursor: pointer;
+    }
+    .filter-select:focus { outline: none; border-color: var(--maroon); }
+
+    /* MAIN TABLE AREA */
+    .table-wrap {
+      max-width: 1100px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 2rem;
+    }
+
+    .day-section { margin-bottom: 2rem; }
+    .day-section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .day-section-header h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.9rem;
+      color: var(--maroon);
+      letter-spacing: 0.08em;
+    }
+    .day-count {
+      background: var(--maroon);
+      color: var(--white);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 20px;
+    }
+    .day-divider { flex: 1; height: 1px; background: var(--cream-dark); }
+
+    /* TABLE */
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(123,28,46,0.07);
+      font-size: 0.88rem;
+    }
+    .schedule-table thead {
+      background: var(--maroon);
+    }
+    .schedule-table thead th {
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      white-space: nowrap;
+    }
+    .schedule-table tbody tr {
+      border-bottom: 1px solid var(--cream-dark);
+      transition: background 0.15s;
+    }
+    .schedule-table tbody tr:last-child { border-bottom: none; }
+    .schedule-table tbody tr:hover { background: #fdf9f4; }
+    .schedule-table tbody tr.inactive { opacity: 0.45; }
+    .schedule-table td { padding: 0.75rem 1rem; vertical-align: middle; }
+
+    .child-name { font-weight: 700; color: var(--text-dark); }
+    .parent-info { font-size: 0.78rem; color: var(--text-mid); margin-top: 0.15rem; }
+
+    .pickup-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .badge-bus { background: #e3f2fd; color: #1565c0; }
+    .badge-pickup { background: #f3e5f5; color: #6a1b9a; }
+    .badge-self { background: #e8f5e9; color: #2e7d32; }
+    .badge-private { background: #fff3e0; color: #e65100; }
+
+    .status-pill {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .pill-active { background: var(--green-light); color: var(--green); }
+    .pill-inactive { background: var(--red-light); color: var(--red); }
+
+    /* ACTION BUTTONS */
+    .action-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn-action {
+      border: none;
+      border-radius: 3px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.72rem;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-action:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-edit { background: var(--maroon); color: var(--white); }
+    .btn-toggle-active { background: var(--cream-dark); color: var(--text-mid); }
+    .btn-toggle-inactive { background: var(--green-light); color: var(--green); }
+
+    /* EDIT MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 4px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: fadeUp 0.25s ease both;
+    }
+    .modal-header {
+      background: var(--maroon);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h3 { font-family: 'Lato', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); }
+    .modal-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.2rem; cursor: pointer; line-height: 1; padding: 0.2rem; }
+    .modal-close:hover { color: var(--white); }
+    .modal-body { padding: 1.5rem; }
+    .modal-child-name { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--maroon); margin-bottom: 1.2rem; }
+
+    .modal-day { border: 1.5px solid var(--cream-dark); border-radius: 4px; margin-bottom: 0.8rem; overflow: hidden; }
+    .modal-day-label { background: var(--cream-dark); padding: 0.5rem 0.9rem; font-family: 'Cinzel', serif; font-size: 0.72rem; font-weight: 600; color: var(--maroon); }
+    .modal-day-fields { padding: 0.8rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; }
+    @media (max-width: 500px) { .modal-day-fields { grid-template-columns: 1fr; } }
+
+    .mfield { display: flex; flex-direction: column; gap: 0.3rem; }
+    .mfield label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--maroon); }
+    .mfield input, .mfield select {
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.5rem 0.7rem;
+      font-size: 0.85rem;
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      width: 100%;
+      appearance: none;
+    }
+    .mfield input:focus, .mfield select:focus { outline: none; border-color: var(--maroon); }
+
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--cream-dark); display: flex; gap: 0.8rem; justify-content: flex-end; }
+    .btn-cancel { background: var(--cream-dark); color: var(--text-mid); border: none; padding: 0.65rem 1.4rem; border-radius: 3px; font-family: 'Lato', sans-serif; font-size: 0.82rem; cursor: pointer; }
+    .btn-save { background: var(--maroon); color: var(--white); border: none; padding: 0.65rem 1.4rem; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; }
+    .btn-save:hover { background: var(--maroon-dark); }
+
+    .no-results { text-align: center; padding: 3rem; color: var(--text-mid); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--green);
+      color: var(--white);
+      padding: 0.8rem 1.4rem;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      z-index: 400;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 700px) {
+      .controls { flex-direction: column; align-items: stretch; }
+      .schedule-table { font-size: 0.8rem; }
+      .schedule-table td, .schedule-table th { padding: 0.6rem 0.6rem; }
+    }
+
+    /* SEND EMAIL BAR */
+.send-email-bar {
+  background: var(--white);
+  border-bottom: 2px solid var(--cream-dark);
+  padding: 1.2rem 2rem;
+}
+.send-email-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.send-email-label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.2rem;
+}
+.send-email-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  color: var(--maroon);
+  letter-spacing: 0.05em;
+}
+.send-email-sub {
+  font-size: 0.75rem;
+  color: var(--text-mid);
+  margin-top: 0.15rem;
+}
+.send-email-controls {
+  display: flex;
+  gap: 0.8rem;
+  flex: 1;
+  max-width: 480px;
+}
+.send-email-controls input {
+  flex: 1;
+  border: 1.5px solid var(--cream-dark);
+  border-radius: 3px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  font-family: 'Lato', sans-serif;
+  background: var(--cream);
+  transition: border-color 0.2s;
+}
+.send-email-controls input:focus {
+  outline: none;
+  border-color: var(--maroon);
+  box-shadow: 0 0 0 3px rgba(123,28,46,0.1);
+}
+.send-email-controls button {
+  background: var(--maroon);
+  color: var(--white);
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(123,28,46,0.2);
+}
+.send-email-controls button:hover { background: var(--maroon-dark); }
+.send-email-controls button:disabled { opacity: 0.6; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Saint David's <span>School</span></div>
+  <div class="nav-right">
+    <span class="nav-badge">Admin</span>
+    <button class="btn-logout" onclick="logout()">Log Out</button>
+  </div>
+</nav>
+
+<!-- ══ PASSWORD SCREEN ══ -->
+<div id="passwordScreen">
+  <div class="password-card">
+    <div class="password-header">
+      <div class="lock-icon">🔒</div>
+      <h2>Admin <em>Access</em></h2>
+    </div>
+    <div class="password-body">
+      <p>This page is restricted to Saint David's School staff. Please enter the admin password to continue.</p>
+      <div class="pw-field">
+        <label>Admin Password</label>
+        <input type="password" id="pwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') checkPassword()" />
+      </div>
+      <button class="btn-pw" onclick="checkPassword()">Enter Admin Panel</button>
+      <p class="pw-error" id="pwError">Incorrect password. Please try again.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN CONTENT ══ -->
+
+<!-- SEND REGISTRATION EMAIL SECTION -->
+<div class="send-email-bar">
+  <div class="send-email-inner">
+    <div class="send-email-label">
+      <span>📧</span>
+      <div>
+        <div class="send-email-title">Send Registration Link</div>
+        <div class="send-email-sub">Type a parent's email to send them their magic registration link</div>
+      </div>
+    </div>
+    <div class="send-email-controls">
+      <input type="email" id="inviteEmail" placeholder="parent@email.com" 
+        onkeydown="if(event.key==='Enter') sendRegistrationLink()" />
+      <button onclick="sendRegistrationLink()" id="sendBtn">Send Link</button>
+    </div>
+  </div>
+</div>
+
+<div id="adminContent">
+
+  <div class="admin-header">
+    <div class="admin-header-inner">
+      <h1>Dismissal <em>Admin Panel</em></h1>
+      <p>Saint David's School — manage all child pickup schedules</p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="statTotal">–</div>
+      <div class="stat-label">Total Children</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statActive">–</div>
+      <div class="stat-label">Active</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statInactive">–</div>
+      <div class="stat-label">Inactive</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statBus">–</div>
+      <div class="stat-label">Bus Riders Today</div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search by child or parent name..." oninput="renderTables()" />
+    </div>
+    <select class="filter-select" id="statusFilter" onchange="renderTables()">
+      <option value="all">All Students</option>
+      <option value="active">Active Only</option>
+      <option value="inactive">Inactive Only</option>
+    </select>
+    <div class="day-tabs" id="dayTabs"></div>
+  </div>
+
+  <!-- TABLES -->
+  <div class="table-wrap" id="tableWrap"></div>
+
+</div>
+
+<!-- ══ EDIT MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Child Schedule</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-child-name" id="modalChildName"></div>
+      <div id="modalDays"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveModalSchedule()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // =============================================
+  //  CONFIGURATION
+  // =============================================
+  const SUPABASE_URL = 'https://neakgshdsyrfclsqxxph.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_Am8Odvk6aUuFnNlPnM9Hhw_29EmPBQk';
+
+  // ── Set your admin password here ──
+  const ADMIN_PASSWORD = 'stdavids2026';
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const PICKUP_TYPES = ['Downtown SNT Bus','West Side SNT Bus','Uptown SNT Bus','Private Downtown Bus','Pickup','Self Dismissal'];
+
+  let allChildren = [];   // all children from DB
+  let allSchedules = [];  // all schedule rows from DB
+  let activeDay = 'All';  // currently selected day tab
+  let editingChildId = null;
+
+  // =============================================
+  //  PASSWORD CHECK
+  // =============================================
+  function checkPassword() {
+    const val = document.getElementById('pwInput').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('passwordScreen').style.display = 'none';
+      document.getElementById('adminContent').style.display = 'block';
+      loadData();
+    } else {
+      document.getElementById('pwError').style.display = 'block';
+      document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  }
+
+  // =============================================
+//  SEND REGISTRATION MAGIC LINK
+// =============================================
+async function sendRegistrationLink() {
+  const email = document.getElementById('inviteEmail').value.trim();
+  const btn = document.getElementById('sendBtn');
+
+  if (!email) {
+    showToast('Please enter a parent email address.', true);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    const { error } = await db.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: 'http://localhost:5500/register.html'
+      }
+    });
+
+    if (error) throw error;
+
+    showToast('✓ Registration link sent to ' + email + '!');
+    document.getElementById('inviteEmail').value = '';
+
+  } catch (err) {
+    console.error(err);
+    showToast('Error sending email. Please try again.', true);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Send Link';
+}
+
+  function logout() {
+    document.getElementById('adminContent').style.display = 'none';
+    document.getElementById('passwordScreen').style.display = 'flex';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwError').style.display = 'none';
+  }
+
+  // =============================================
+  //  BUILD DAY TABS
+  // =============================================
+  function buildDayTabs() {
+    const container = document.getElementById('dayTabs');
+    container.innerHTML = '';
+    ['All', ...DAYS].forEach(day => {
+      const btn = document.createElement('button');
+      btn.className = 'day-tab' + (day === activeDay ? ' active' : '');
+      btn.textContent = day;
+      btn.onclick = () => { activeDay = day; buildDayTabs(); renderTables(); };
+      container.appendChild(btn);
+    });
+  }
+
+  // =============================================
+  //  LOAD DATA FROM SUPABASE
+  // =============================================
+  async function loadData() {
+    try {
+      const { data: children, error: ce } = await db.from('children').select('*').order('child_last_name');
+      const { data: schedules, error: se } = await db.from('schedules').select('*');
+      if (ce || se) throw ce || se;
+
+      allChildren = children || [];
+      allSchedules = schedules || [];
+
+      updateStats();
+      buildDayTabs();
+      renderTables();
+    } catch (err) {
+      console.error(err);
+      document.getElementById('tableWrap').innerHTML =
+        '<p style="padding:2rem;color:var(--red);">Error loading data. Check your Supabase keys.</p>';
+    }
+  }
+
+  // =============================================
+  //  STATS
+  // =============================================
+  function updateStats() {
+    const total = allChildren.length;
+    const active = allChildren.filter(c => c.is_active).length;
+    const inactive = total - active;
+    const todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+    const busTypes = ['Downtown SNT Bus','West Side SNT Bus','Uptown SNT Bus','Private Downtown Bus'];
+    const busToday = allSchedules.filter(s =>
+      s.day_of_week === todayName && busTypes.includes(s.pickup_type)
+    ).length;
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statActive').textContent = active;
+    document.getElementById('statInactive').textContent = inactive;
+    document.getElementById('statBus').textContent = busToday;
+  }
+
+  // =============================================
+  //  RENDER TABLES (grouped by day)
+  // =============================================
+  function renderTables() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const wrap = document.getElementById('tableWrap');
+    wrap.innerHTML = '';
+
+    // Filter children
+    let filtered = allChildren.filter(child => {
+      const name = (child.child_first_name + ' ' + child.child_last_name).toLowerCase();
+      const parent = (child.parent_first_name + ' ' + child.parent_last_name).toLowerCase();
+      const matchSearch = !search || name.includes(search) || parent.includes(search);
+      const matchStatus = statusFilter === 'all'
+        || (statusFilter === 'active' && child.is_active)
+        || (statusFilter === 'inactive' && !child.is_active);
+      return matchSearch && matchStatus;
+    });
+
+    if (filtered.length === 0) {
+      wrap.innerHTML = '<div class="no-results">No children match your search.</div>';
+      return;
+    }
+
+    const daysToShow = activeDay === 'All' ? DAYS : [activeDay];
+
+    daysToShow.forEach(day => {
+      // Build rows for this day
+      const rows = filtered.map(child => {
+        const sched = allSchedules.find(s => s.child_id === child.id && s.day_of_week === day);
+        return { child, sched };
+      });
+
+      const section = document.createElement('div');
+      section.className = 'day-section';
+      section.innerHTML = `
+        <div class="day-section-header">
+          <h3>${day}</h3>
+          <span class="day-count">${rows.length}</span>
+          <div class="day-divider"></div>
+        </div>
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>Child</th>
+              <th>Parent</th>
+              <th>Pickup Type</th>
+              <th>Time</th>
+              <th>Pickup Person</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(({ child, sched }) => `
+              <tr class="${child.is_active ? '' : 'inactive'}" id="row-${child.id}">
+                <td>
+                  <div class="child-name">${child.child_last_name}, ${child.child_first_name}</div>
+                </td>
+                <td>
+                  <div>${child.parent_first_name} ${child.parent_last_name}</div>
+                  <div class="parent-info">${child.parent_phone || ''}</div>
+                </td>
+                <td>${sched ? `<span class="pickup-badge ${getBadgeClass(sched.pickup_type)}">${sched.pickup_type}</span>` : '<span style="color:#bbb">—</span>'}</td>
+                <td>${sched && sched.pickup_time ? formatTime(sched.pickup_time) : '—'}</td>
+                <td>${sched && sched.pickup_person_name ? sched.pickup_person_name : '—'}</td>
+                <td><span class="status-pill ${child.is_active ? 'pill-active' : 'pill-inactive'}">${child.is_active ? 'Active' : 'Inactive'}</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-action btn-edit" onclick="openEditModal(${child.id})">Edit</button>
+                    <button class="btn-action ${child.is_active ? 'btn-toggle-active' : 'btn-toggle-inactive'}"
+                      onclick="toggleActive(${child.id}, ${!child.is_active})">
+                      ${child.is_active ? 'Deactivate' : 'Activate'}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      wrap.appendChild(section);
+    });
+  }
+
+  // =============================================
+  //  HELPERS
+  // =============================================
+  function getBadgeClass(type) {
+    if (!type) return '';
+    if (type.includes('Bus')) return type.includes('Private') ? 'badge-private' : 'badge-bus';
+    if (type === 'Pickup') return 'badge-pickup';
+    if (type === 'Self Dismissal') return 'badge-self';
+    return '';
+  }
+
+  function formatTime(t) {
+    if (!t) return '—';
+    const [h, m] = t.split(':');
+    const hour = parseInt(h);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const display = hour % 12 || 12;
+    return `${display}:${m} ${ampm}`;
+  }
+
+  // =============================================
+  //  TOGGLE ACTIVE / INACTIVE
+  // =============================================
+  async function toggleActive(childId, newStatus) {
+    const { error } = await db
+      .from('children')
+      .update({ is_active: newStatus })
+      .eq('id', childId);
+
+    if (error) { showToast('Error updating status.', true); return; }
+
+    // Update local data
+    const child = allChildren.find(c => c.id === childId);
+    if (child) child.is_active = newStatus;
+    updateStats();
+    renderTables();
+    showToast(newStatus ? 'Child activated.' : 'Child deactivated.');
+  }
+
+  // =============================================
+  //  EDIT MODAL
+  // =============================================
+  function openEditModal(childId) {
+    editingChildId = childId;
+    const child = allChildren.find(c => c.id === childId);
+    document.getElementById('modalChildName').textContent =
+      child.child_first_name + ' ' + child.child_last_name;
+
+    const container = document.getElementById('modalDays');
+    container.innerHTML = '';
+
+    DAYS.forEach(day => {
+      const sched = allSchedules.find(s => s.child_id === childId && s.day_of_week === day) || {};
+      const typeOptions = PICKUP_TYPES.map(t =>
+        `<option value="${t}" ${sched.pickup_type === t ? 'selected' : ''}>${t}</option>`
+      ).join('');
+      const dayId = day.toLowerCase();
+
+      container.innerHTML += `
+        <div class="modal-day">
+          <div class="modal-day-label">${day}</div>
+          <div class="modal-day-fields">
+            <div class="mfield">
+              <label>Pickup Type</label>
+              <select id="modal_${dayId}_type">
+                <option value="">Select...</option>
+                ${typeOptions}
+              </select>
+            </div>
+            <div class="mfield">
+              <label>Pickup Time</label>
+              <input type="time" id="modal_${dayId}_time" value="${sched.pickup_time || ''}" />
+            </div>
+            <div class="mfield">
+              <label>Pickup Person</label>
+              <input type="text" id="modal_${dayId}_person" value="${sched.pickup_person_name || ''}" placeholder="Name" />
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    editingChildId = null;
+  }
+
+  async function saveModalSchedule() {
+    if (!editingChildId) return;
+
+    try {
+      for (const day of DAYS) {
+        const dayId = day.toLowerCase();
+        const { error } = await db
+          .from('schedules')
+          .update({
+            pickup_type: document.getElementById(`modal_${dayId}_type`).value,
+            pickup_time: document.getElementById(`modal_${dayId}_time`).value,
+            pickup_person_name: document.getElementById(`modal_${dayId}_person`).value.trim(),
+          })
+          .eq('child_id', editingChildId)
+          .eq('day_of_week', day);
+
+        if (error) throw error;
+
+        // Update local data
+        const sched = allSchedules.find(s => s.child_id === editingChildId && s.day_of_week === day);
+        if (sched) {
+          sched.pickup_type = document.getElementById(`modal_${dayId}_type`).value;
+          sched.pickup_time = document.getElementById(`modal_${dayId}_time`).value;
+          sched.pickup_person_name = document.getElementById(`modal_${dayId}_person`).value.trim();
+        }
+      }
+
+      closeModal();
+      renderTables();
+      showToast('Schedule updated successfully!');
+
+    } catch (err) {
+      console.error(err);
+      showToast('Error saving changes.', true);
+    }
+  }
+
+  // =============================================
+  //  TOAST NOTIFICATION
+  // =============================================
+  function showToast(msg, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.style.background = isError ? 'var(--red)' : 'var(--green)';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+</script>
+
+</body>
+</html>
