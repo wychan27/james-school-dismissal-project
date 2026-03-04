@@ -673,7 +673,7 @@ async function sendRegistrationLink() {
     const { error } = await db.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: 'http://localhost:5500/register.html'
+        emailRedirectTo: 'https://james-school-dismissal-project.vercel.app/register.html'
       }
     });
 
