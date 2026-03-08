@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome – Saint David's School Dismissal Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --maroon: #7B1C2E;
+      --maroon-dark: #5a1220;
+      --gold: #C9A84C;
+      --gold-light: #e2c97e;
+      --cream: #F5F0E8;
+      --cream-dark: #ece5d6;
+      --text-dark: #2a1a1f;
+      --text-mid: #5a4a4e;
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      background-color: var(--maroon);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .nav-logo {
+      font-family: 'Cinzel', serif;
+      color: var(--white);
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--gold-light); font-weight: 600; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 40%, #b8862a 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      color: var(--white);
+      font-weight: 400;
+      line-height: 1.15;
+      position: relative;
+    }
+    .hero h1 em { font-style: italic; color: var(--gold-light); }
+    .hero-sub {
+      margin-top: 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: rgba(255,255,255,0.78);
+      font-size: 1.1rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+    .hero-divider {
+      width: 50px; height: 1px;
+      background: var(--gold);
+      margin: 1.4rem auto 0;
+      position: relative;
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+      width: 100%;
+    }
+
+    /* INTRO TEXT */
+    .intro {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .intro p {
+      font-size: 0.98rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* TWO COLUMN CARDS */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    /* CARD */
+    .card {
+      background: var(--white);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(123,28,46,0.1);
+      animation: fadeUp 0.5s ease both;
+    }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header {
+      background: var(--maroon);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .card-icon {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .card-header h2 {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .card-body {
+      padding: 1.8rem 1.8rem 2rem;
+    }
+    .card-body p {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    /* FORM FIELDS */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .field-group label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--maroon);
+    }
+    .field-group input {
+      border: 1.5px solid var(--cream-dark);
+      border-radius: 3px;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.95rem;
+      font-family: 'Lato', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .field-group input:focus {
+      outline: none;
+      border-color: var(--maroon);
+      box-shadow: 0 0 0 3px rgba(123,28,46,0.1);
+      background: var(--white);
+    }
+    .field-group input::placeholder { color: #bbb; }
+
+    /* BUTTONS */
+    .btn-primary {
+      width: 100%;
+      background: var(--maroon);
+      color: var(--white);
+      border: none;
+      padding: 0.9rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(123,28,46,0.2);
+    }
+    .btn-primary:hover {
+      background: var(--maroon-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(123,28,46,0.3);
+    }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      width: 100%;
+      background: transparent;
+      color: var(--maroon);
+      border: 2px solid var(--maroon);
+      padding: 0.85rem;
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      transition: background 0.2s, color 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(123,28,46,0.1);
+    }
+    .btn-secondary:hover {
+      background: var(--maroon);
+      color: var(--white);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(123,28,46,0.25);
+    }
+
+    /* STATUS MESSAGES */
+    .status-msg {
+      margin-top: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 3px;
+      font-size: 0.88rem;
+      display: none;
+      line-height: 1.5;
+    }
+    .status-msg.error { background: #fdecea; color: #b71c1c; border-left: 4px solid #b71c1c; display: block; }
+    .status-msg.success { background: #e8f5e9; color: #1b5e20; border-left: 4px solid #2e7d32; display: block; }
+
+    /* GOLD DIVIDER */
+    .gold-divider {
+      width: 60px; height: 2px;
+      background: var(--gold);
+      margin: 0 auto 1.5rem;
+      border-radius: 2px;
+    }
+
+    /* EDIT CARD DESCRIPTION */
+    .edit-steps {
+      margin: 0 0 1.5rem;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .edit-steps li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .step-num {
+      width: 22px; height: 22px;
+      background: var(--maroon);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      border-top: 1px solid var(--cream-dark);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Saint David's <span>School</span></div>
+  <div class="nav-links">
+    <a href="welcome.html">Welcome</a>
+    <a href="#">Home</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <p class="hero-label">Dismissal Services</p>
+  <h1>Welcome to<br><em>Saint David's School</em></h1>
+  <p class="hero-sub">Manage your child's dismissal schedule quickly and securely.</p>
+  <div class="hero-divider"></div>
+</div>
+
+<main>
+
+  <div class="intro">
+    <p>Use the options below to register your child's dismissal schedule for the first time, or to update an existing schedule. All actions are secured with a one-time email link.</p>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- CARD 1: GET REGISTRATION LINK -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✉️</div>
+        <h2>New Registration</h2>
+      </div>
+      <div class="card-body">
+        <p>First time registering? Enter your email address below and we'll send you a secure link to complete your child's dismissal registration.</p>
+
+        <div class="field-group">
+          <label>Email Address</label>
+          <input type="email" id="regEmail" placeholder="email@example.com"
+            onkeydown="if(event.key==='Enter') sendRegistrationLink()" />
+        </div>
+
+        <button class="btn-primary" id="regBtn" onclick="sendRegistrationLink()">
+          Send Registration Link
+        </button>
+        <div class="status-msg" id="regStatus"></div>
+      </div>
+    </div>
+
+    <!-- CARD 2: EDIT SCHEDULE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📅</div>
+        <h2>Edit Existing Schedule</h2>
+      </div>
+      <div class="card-body">
+        <p>Already registered? You can update your child's dismissal schedule at any time. Here's how:</p>
+
+        <ul class="edit-steps">
+          <li>
+            <div class="step-num">1</div>
+            <span>Click the button below to go to the Edit Schedule page</span>
+          </li>
+          <li>
+            <div class="step-num">2</div>
+            <span>Enter your registered email address and phone number</span>
+          </li>
+          <li>
+            <div class="step-num">3</div>
+            <span>Check your email for a secure link and click it to edit your schedule</span>
+          </li>
+        </ul>
+
+        <a href="edit-login.html" class="btn-secondary">Edit My Child's Schedule</a>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2026 Saint David's School &nbsp;|&nbsp; Dismissal Services
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // =============================================
+  //  CONFIGURATION — replace with your own keys
+  // =============================================
+  const SUPABASE_URL = 'https://neakgshdsyrfclsqxxph.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_Am8Odvk6aUuFnNlPnM9Hhw_29EmPBQk';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // =============================================
+  //  SEND REGISTRATION LINK
+  // =============================================
+  async function sendRegistrationLink() {
+    const email = document.getElementById('regEmail').value.trim();
+    const btn = document.getElementById('regBtn');
+    const statusEl = document.getElementById('regStatus');
+
+    if (!email) {
+      showStatus('regStatus', 'Please enter your email address.', 'error');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      const { error } = await db.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: window.location.origin + '/register.html'
+        }
+      });
+
+      if (error) throw error;
+
+      showStatus('regStatus', '✓ Registration link sent! Please check your inbox and click the link to complete your registration.', 'success');
+      btn.textContent = 'Link Sent!';
+      document.getElementById('regEmail').value = '';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Send Registration Link';
+      }, 5000);
+
+    } catch (err) {
+      console.error(err);
+      showStatus('regStatus', 'Something went wrong. Please try again or contact the school office.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Send Registration Link';
+    }
+  }
+
+  function showStatus(id, msg, type) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+  }
+</script>
+
+</body>
+</html>
